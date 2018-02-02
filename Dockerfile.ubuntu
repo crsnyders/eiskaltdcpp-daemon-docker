@@ -1,0 +1,45 @@
+FROM ubuntu AS builder
+
+RUN apt update && apt install -y --no-install-recommends \
+    build-essential \
+    ca-certificates \
+    cmake \
+    git \
+    gettext \
+    libboost-system-dev \
+    libbz2-dev \
+    libssl-dev \
+    pkg-config
+
+# eiskaltdcpp
+RUN cd /tmp && git clone https://github.com/eiskaltdcpp/eiskaltdcpp.git eiskaltdcpp-master
+RUN mkdir -p /tmp/eiskaltdcpp-master/builddir
+RUN cd /tmp/eiskaltdcpp-master/builddir \
+ && cmake -DCMAKE_BUILD_TYPE=Release \
+          -DNO_UI_DAEMON=ON \
+          -DJSONRPC_DAEMON=ON \
+          -DLOCAL_JSONCPP=ON \
+          -DUSE_QT=OFF \
+          -DUSE_QT5=OFF \
+          -DUSE_IDNA=OFF \
+          -DFREE_SPACE_BAR_C=OFF \
+          -DLINK=STATIC \
+          -Dlinguas="" \
+          ..
+RUN cd /tmp/eiskaltdcpp-master/builddir \
+ && make
+
+
+# -----------------------------------------------------------------------------
+# production image:
+# -----------------------------------------------------------------------------
+FROM ubuntu
+COPY --from=builder /tmp/eiskaltdcpp-master/builddir/eiskaltdcpp-daemon/eiskaltdcpp-daemon \
+                    /bin/
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libboost-system1.58.0
+
+
+EXPOSE 2222/tcp

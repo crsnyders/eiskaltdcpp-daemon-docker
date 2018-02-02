@@ -1,0 +1,16 @@
+diff --git a/dcpp/Util.h b/dcpp/Util.h
+index b6d13377..ce8f1646 100644
+--- a/dcpp/Util.h
++++ b/dcpp/Util.h
+@@ -270,11 +270,7 @@ public:
+ #ifdef _WIN32
+         return _atoi64(aString.c_str());
+ #else
+-    #ifndef __HAIKU__
+-        return strtoq(aString.c_str(), (char **)NULL, 10);
+-    #else
+         return strtoll(aString.c_str(), (char **)NULL, 10);
+-    #endif
+ #endif
+     }
+ 
