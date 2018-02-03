@@ -53,3 +53,5 @@ RUN apk update && apk add boost-system gettext libbz2 libcrypto1.0 libbz2 libint
 
 
 EXPOSE 2222/tcp
+
+CMD ["eiskaltdcpp-daemon","-v"]

@@ -1,10 +1,10 @@
 FROM ubuntu AS builder
 
-RUN apt update && apt install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     cmake \
-    git \
+    curl \
     gettext \
     libboost-system-dev \
     libbz2-dev \
@@ -12,7 +12,7 @@ RUN apt update && apt install -y --no-install-recommends \
     pkg-config
 
 # eiskaltdcpp
-RUN cd /tmp && git clone https://github.com/eiskaltdcpp/eiskaltdcpp.git eiskaltdcpp-master
+RUN curl -L https://github.com/eiskaltdcpp/eiskaltdcpp/archive/master.tar.gz | tar xz -C /tmp
 RUN mkdir -p /tmp/eiskaltdcpp-master/builddir
 RUN cd /tmp/eiskaltdcpp-master/builddir \
  && cmake -DCMAKE_BUILD_TYPE=Release \
@@ -37,9 +37,7 @@ FROM ubuntu
 COPY --from=builder /tmp/eiskaltdcpp-master/builddir/eiskaltdcpp-daemon/eiskaltdcpp-daemon \
                     /bin/
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    libboost-system1.58.0
-
+RUN apt-get update && apt-get install -y --no-install-recommends libboost-system1.58.0
 
 EXPOSE 2222/tcp
+CMD ["eiskaltdcpp-daemon","-v"]
