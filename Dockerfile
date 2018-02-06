@@ -51,6 +51,7 @@ COPY --from=builder /tmp/eiskaltdcpp-master/builddir/eiskaltdcpp-daemon/eiskaltd
 RUN apk update && apk add boost-system gettext libbz2 libcrypto1.0 libbz2 libintl libstdc++ libssl1.0
 
 
+EXPOSE 3121/tcp
 EXPOSE 2222/tcp
 
 CMD ["eiskaltdcpp-daemon","-v"]

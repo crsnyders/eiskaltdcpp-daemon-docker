@@ -39,5 +39,6 @@ COPY --from=builder /tmp/eiskaltdcpp-master/builddir/eiskaltdcpp-daemon/eiskaltd
 
 RUN apt-get update && apt-get install -y --no-install-recommends libboost-system1.58.0
 
+EXPOSE 3121/tcp
 EXPOSE 2222/tcp
 CMD ["eiskaltdcpp-daemon","-v"]
