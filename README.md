@@ -1,4 +1,4 @@
-# eiskaltdcpp-deamon-docker
+# eiskaltdcpp-daemon-docker
 
 The following folders need to be mounted
 
