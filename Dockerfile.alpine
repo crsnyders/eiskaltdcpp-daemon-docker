@@ -18,7 +18,8 @@ RUN apk update && apk add --no-cache binutils \
 
 RUN cd /tmp && git clone --depth 1 https://github.com/eiskaltdcpp/eiskaltdcpp.git eiskaltdcpp-master
 ADD alpine_build.patch /tmp/
-RUN cd /tmp/eiskaltdcpp-master && git apply /tmp/alpine_build.patch
+ADD json_rpc.patch /tmp/
+RUN cd /tmp/eiskaltdcpp-master && git apply /tmp/alpine_build.patch && git apply /tmp/json_rpc.patch
 
 # eiskaltdcpp
 
@@ -28,6 +29,7 @@ RUN cd /tmp/eiskaltdcpp-master/builddir \
           -DCMAKE_BUILD_TYPE=Release \
           -DNO_UI_DAEMON=ON \
           -DJSONRPC_DAEMON=ON \
+          -DUSE_CLI_JSONRPC=ON \
           -DLOCAL_JSONCPP=ON \
           -DUSE_QT=OFF \
           -DUSE_QT5=OFF \
@@ -54,5 +56,6 @@ RUN apk update && apk add boost-system gettext libbz2 libcrypto1.0 libbz2 libint
 
 EXPOSE 3121/tcp
 EXPOSE 2222/tcp
+EXPOSE 2222/udp
 
-CMD ["eiskaltdcpp-daemon","-v"]
+CMD ["eiskaltdcpp-daemon","-v","-s","/var/log/eiskaltdcpp.log"]

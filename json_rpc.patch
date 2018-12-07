@@ -1,0 +1,14 @@
+diff --git a/eiskaltdcpp-daemon/ServerThread.cpp b/eiskaltdcpp-daemon/ServerThread.cpp
+index ad696ae7..6808ec66 100644
+--- a/eiskaltdcpp-daemon/ServerThread.cpp
++++ b/eiskaltdcpp-daemon/ServerThread.cpp
+@@ -43,7 +43,7 @@
+ #endif
+
+ unsigned short int lport = 3121;
+-string lip = "127.0.0.1";
++string lip = "0.0.0.0";
+ bool isVerbose = false;
+ bool isDebug = false;
+ string xmlrpcLog = "/tmp/eiskaltdcpp-daemon.xmlrpc.log";
+

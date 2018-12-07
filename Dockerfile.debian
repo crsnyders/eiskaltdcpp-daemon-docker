@@ -1,4 +1,4 @@
-FROM ubuntu AS builder
+FROM debian AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gettext \
     libboost-system-dev \
     libbz2-dev \
+    libminiupnpc-dev \
     libssl-dev \
     pkg-config \
     zlib1g-dev 
-
 
 # eiskaltdcpp
 RUN curl -L https://github.com/eiskaltdcpp/eiskaltdcpp/archive/master.tar.gz | tar xz -C /tmp
@@ -21,20 +21,24 @@ RUN cd /tmp/eiskaltdcpp-master/builddir \
           -DNO_UI_DAEMON=ON \
           -DJSONRPC_DAEMON=ON \
           -DLOCAL_JSONCPP=ON \
+          -DPERL_REGEX=OFF \
+          -DLUA_SCRIPT=OFF \
+          -DWITH_LUASCRIPTS=OFF \
           -DUSE_QT=OFF \
           -DUSE_QT5=OFF \
           -DUSE_IDNA=OFF \
           -DFREE_SPACE_BAR_C=OFF \
           -DLINK=STATIC \
-          -Dlinguas="" \
+          -Dlinguas="en" \
           ..
 RUN cd /tmp/eiskaltdcpp-master/builddir \
  && make
 
+
 # -----------------------------------------------------------------------------
 # production image:
 # -----------------------------------------------------------------------------
-FROM ubuntu
+FROM debian
 COPY --from=builder /tmp/eiskaltdcpp-master/builddir/eiskaltdcpp-daemon/eiskaltdcpp-daemon \
                     /bin/
 
